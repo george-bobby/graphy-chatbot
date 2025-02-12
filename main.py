@@ -33,21 +33,30 @@ def main():
 
     # Set OpenAI API key
     if 'OPENAI_API_KEY' not in st.session_state:
-        st.sidebar.subheader("OpenAI API Key")
-        openai_api_key = st.sidebar.text_input(
-            "Enter your OpenAI API Key:", type='password')
-        if openai_api_key:
-            os.environ['OPENAI_API_KEY'] = openai_api_key
-            st.session_state['OPENAI_API_KEY'] = openai_api_key
-            st.sidebar.success("OpenAI API Key set successfully.")
-            embeddings = OpenAIEmbeddings()
-            # Use model that supports function calling
-            llm = ChatOpenAI(model_name="gpt-4o")
-            st.session_state['embeddings'] = embeddings
-            st.session_state['llm'] = llm
-    else:
-        embeddings = st.session_state['embeddings']
-        llm = st.session_state['llm']
+        st.session_state['OPENAI_API_KEY'] = None
+    if 'embeddings' not in st.session_state:
+        st.session_state['embeddings'] = None
+    if 'llm' not in st.session_state:
+        st.session_state['llm'] = None
+
+    st.sidebar.subheader("OpenAI API Key")
+    openai_api_key = st.sidebar.text_input(
+        "Enter your OpenAI API Key:", type='password')
+
+    if openai_api_key:
+        os.environ['OPENAI_API_KEY'] = openai_api_key
+        st.session_state['OPENAI_API_KEY'] = openai_api_key
+        st.sidebar.success("OpenAI API Key set successfully.")
+
+        # Initialize embeddings and LLM only if they are not already set
+        if st.session_state['embeddings'] is None:
+            st.session_state['embeddings'] = OpenAIEmbeddings()
+        if st.session_state['llm'] is None:
+            st.session_state['llm'] = ChatOpenAI(model_name="gpt-4o-mini")
+
+    # Retrieve embeddings and LLM from session state
+    embeddings = st.session_state['embeddings']
+    llm = st.session_state['llm']
 
     # Initialize variables
     neo4j_url = None
