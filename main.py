@@ -130,16 +130,16 @@ def main():
                 graph.query(cypher)
 
                 # Define allowed nodes and relationships
-                allowed_nodes = ["Patient", "Disease",
-                                 "Medication", "Test", "Symptom", "Doctor"]
-                allowed_relationships = [
-                    "HAS_DISEASE", "TAKES_MEDICATION", "UNDERWENT_TEST", "HAS_SYMPTOM", "TREATED_BY"]
+                # allowed_nodes = ["Patient", "Disease",
+                #                  "Medication", "Test", "Symptom", "Doctor"]
+                # allowed_relationships = [
+                #     "HAS_DISEASE", "TAKES_MEDICATION", "UNDERWENT_TEST", "HAS_SYMPTOM", "TREATED_BY"]
 
                 # Transform documents into graph documents
                 transformer = LLMGraphTransformer(
                     llm=llm,
-                    allowed_nodes=allowed_nodes,
-                    allowed_relationships=allowed_relationships,
+                    allowed_nodes=None,
+                    allowed_relationships=None,
                     node_properties=False,
                     relationship_properties=False
                 )
